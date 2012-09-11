@@ -11,6 +11,21 @@ Getting Recite
 Recite is provided as a standalone Python script. A Windows executable that bundles the
 required Python environment is also available.
 
+Recite is available on Dell TechCenter:
+  http://dell.to/recite-wsman
+
+The Recite source code can be checked out of GIT as follows:
+  git clone http://linux.dell.com/git/recite.git
+
+Contact
+-------
+
+To get help or to provide feedback, recommendations or even patches, send a note to
+the linux-poweredge@dell.com mailing list.
+
+Sign up for the mailing list here:
+  https://lists.us.dell.com/mailman/listinfo/linux-poweredge
+
 Requirements
 ------------
 
