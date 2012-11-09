@@ -1382,25 +1382,6 @@ RAID_METHODS = {
 }
 
 iDRAC_METHODS = {
-	"ApplyAttribute": {
-		COMMAND: "invoke",
-		URL: "cimv2/root/dcim/DCIM_iDRACCardService?SystemCreationClassName=DCIM_ComputerSystem+CreationClassName=DCIM_iDRACCardService+SystemName=DCIM:ComputerSystem+Name=DCIM:iDRACCardService",
-		PARAMS: {
-			"Target": {
-				DEFAULT: None,
-				EXAMPLE: "iDRAC.Embedded.1"
-			},
-			"AttributeName": {
-				DEFAULT: None,
-				EXAMPLE: "Users.4#Enable"
-			},
-			"AttributeValue": {
-				DEFAULT: None,
-				EXAMPLE: "Enabled"
-			}
-		}
-	},
-
 	"ApplyAttributes": {
 		COMMAND: "invoke",
 		URL: "cimv2/root/dcim/DCIM_iDRACCardService?SystemCreationClassName=DCIM_ComputerSystem+CreationClassName=DCIM_iDRACCardService+SystemName=DCIM:ComputerSystem+Name=DCIM:iDRACCardService",
@@ -1837,6 +1818,11 @@ LC_METHODS = {
 		}
 	},
 
+	"LCWipe": {
+		COMMAND: "invoke",
+		URL: "cimv2/root/dcim/DCIM_LCService?SystemCreationClassName=DCIM_ComputerSystem+CreationClassName=DCIM_LCService+SystemName=DCIM:ComputerSystem+Name=DCIM:LCService"
+	},
+
 	"SetLCAttribute": {
 		NAME: "SetAttribute",
 		COMMAND: "invoke",
@@ -2152,6 +2138,17 @@ UPDATE_METHODS = {
 	"GetSoftwareIdentities": {
 		COMMAND: "enumerate",
 		URL: "cimv2/root/dcim/DCIM_SoftwareIdentity"
+	},
+
+	"InstallFromSoftwareIdentity": {
+		COMMAND: "invoke",
+		URL: "cimv2/root/dcim/DCIM_SoftwareInstallationService?CreationClassName=DCIM_SoftwareInstallationService+SystemCreationClassName=DCIM_ComputerSystem+SystemName=IDRAC:ID+Name=SoftwareUpdate",
+		PARAMS: {
+			"TargetRef": {
+				DEFAULT: [None],
+				EXAMPLE: ["DCIM:INSTALLED:NONPCI:160:0.43"]
+			}
+		}
 	},
 
 	"InstallFromURI": {
@@ -5600,7 +5597,11 @@ def batch(fname, cmds="", sub=None):
 def interactive():
 	ret = True
 	while True:
-		cmd = raw_input("--> ")
+		try:
+			cmd = raw_input("--> ")
+		except EOFError:
+			ret = process("quit")
+			break
 		cmd = cmd.replace("\\", "\\\\")
 		ret = process(cmd)
 		if ret == None:
